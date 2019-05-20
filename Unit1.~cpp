@@ -1,0 +1,140 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit1.h"
+#include "Unit2.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "ShockwaveFlashObjects_OCX"
+#pragma link "cdiroutl"
+#pragma resource "*.dfm"
+TForm1 *Form1;
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+        : TForm(Owner)
+{
+ic=0;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+if(OpenDialog1->Execute() )
+{
+
+ShockwaveFlash1->Movie = OpenDialog1->FileName ;
+ShockwaveFlash1->Play() ;
+StatusBar1->SimpleText ="Playing " +ShockwaveFlash1->Movie ;
+}
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+ShockwaveFlash1->Zoom(1.5);
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+ShockwaveFlash1->Zoom(0);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button4Click(TObject *Sender)
+{
+ShockwaveFlash1->Stop() ;
+StatusBar1->SimpleText ="Stop : " +ShockwaveFlash1->Movie ;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button5Click(TObject *Sender)
+{
+if(FileListBox1->ItemIndex>-1)
+{
+
+ShockwaveFlash1->Stop() ;
+ShockwaveFlash1->Movie=FileListBox1->FileName;
+TrackBar1->Max =ShockwaveFlash1->TotalFrames ;
+ShockwaveFlash1->Play() ;
+StatusBar1->SimpleText ="Playing " +ShockwaveFlash1->Movie ;
+}
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button6Click(TObject *Sender)
+{
+Close();        
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormResize(TObject *Sender)
+{
+ShockwaveFlash1->Refresh();         
+}
+//---------------------------------------------------------------------------
+
+
+
+
+void __fastcall TForm1::TrackBar1Change(TObject *Sender)
+{
+
+if(ShockwaveFlash1->Playing)
+{
+ShockwaveFlash1->FrameNum =TrackBar1->Position ;
+ShockwaveFlash1->Play() ;
+}
+else
+{
+ShockwaveFlash1->FrameNum =TrackBar1->Position ;
+ShockwaveFlash1->Stop() ;
+}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::CheckBox1Click(TObject *Sender)
+{
+ShockwaveFlash1->Loop =CheckBox1->Checked ;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Timer1Timer(TObject *Sender)
+{
+TrackBar1->Position =ShockwaveFlash1->FrameNum ;
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Image1Click(TObject *Sender)
+{
+Form2=new TForm2(Application);
+Form2->ShowModal() ;
+delete Form2;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Timer2Timer(TObject *Sender)
+{
+
+switch(ic)
+{
+case 0:
+  Image1->Picture =Image2->Picture;
+  ic=1;
+  break;
+case 1:
+  Image1->Picture =Image3->Picture;
+  ic=2;
+  break;
+case 2:
+  Image1->Picture =Image4->Picture;
+  ic=3;
+  break;
+case 3:
+  Image1->Picture =Image5->Picture;
+  ic=0;
+  break;
+}
+
+}
+//---------------------------------------------------------------------------
+
